@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Inicial - Controle de Estoque</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Estilos adicionais para centralização vertical e ajustes nos botões */
+        .vertical-center {
+            min-height: 100vh; /* altura da tela completa */
+            display: flex;
+            align-items: center; /* alinhamento vertical */
+            justify-content: center; /* alinhamento horizontal */
+        }
+        .btn-group-vertical > a {
+            margin-bottom: 10px; /* espaço entre os botões */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar simples para navegação -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Controle de Estoque</a>
+        </div>
+    </nav>
+
+    <!-- Container centralizado -->
+    <div class="vertical-center">
+        <div> <!-- Envoltório dos botões -->
+            <h3 class="text-center mb-4">Sistema de Controle de Estoque</h2>
+            <!-- Grupo de botões vertical -->
+            <div class="btn-group-vertical">
+                <a href="/cadastro-mercadoria" class="btn btn-primary btn-lg">Cadastro de Mercadoria</a>
+                <a href="/lista-produtos-proximo-vencimento" class="btn btn-warning btn-lg">Lista de Produtos Próximo ao Vencimento</a>
+                <a href="/estoque" class="btn btn-success btn-lg">Estoque</a>
+                <a href="{{ url_for('saida_mercadorias') }}">Registrar Saída de Mercadorias</a>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

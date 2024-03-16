@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Configurações básicas da página, incluindo caracteres e responsividade -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos Próximos ao Vencimento</title>
+    <!-- Link para o CSS do Bootstrap para estilização rápida e responsiva -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Estilos personalizados para melhorar a aparência da tabela e da página */
+        .table-container {
+            margin-top: 20px;
+        }
+        .table-responsive {
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .table {
+            margin-bottom: 0;
+        }
+        .highlight {
+            color: red; /* Destaque para produtos próximos do vencimento */
+        }
+        /* Estilos para destacar e alinhar nome e quantidade */
+        .total-highlight {
+            font-weight: bold; /* Deixa o texto em negrito */
+            color: #007bff; /* Cor azul para destacar */
+        }
+        .total-align {
+            text-align: center; /* Alinha o texto ao centro */
+        }
+    </style>
+</head>
+<body>
+    <div class="container table-container">
+        <h2>Produtos Próximos ao Vencimento</h2>
+        <!-- Botão Voltar adicionado para melhor navegação -->
+        <button type="button" class="btn btn-info mb-3" onclick="history.back()">Voltar</button>
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <!-- Cabeçalho da tabela, definindo as colunas -->
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Código</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Informações do Produto</th>
+                        <th scope="col">Quantidade</th>
+                        <th scope="col">Custo</th>
+                        <th scope="col">Data de Inclusão</th>
+                        <th scope="col">Data de Validade</th>
+                        <th scope="col">Dias até Vencimento</th>
+                    </tr>
+                </thead>
+                <!-- Corpo da tabela, preenchido dinamicamente com os produtos -->
+                <tbody id="productTableBody">
+                    {% for produto in produtos %}
+                    {% if produto.dias_ate_vencimento is not none and produto.dias_ate_vencimento <= 7 %}
+                    <tr>
+                        <!-- Detalhes de cada produto, com destaque para os próximos do vencimento -->
+                        <td>{{ produto.id | default('N/A') }}</td>
+                        <td>{{ produto.codigo | default('Código não disponível') }}</td>
+                        <td>{{ produto.nome | default('Nome não disponível') }}</td>
+                        <td>{{ produto.informacoes | default('N/A') }}</td>
+                        <td>{{ produto.quantidade | default('N/A') }}</td>
+                        <td>{% if produto.custo is not none %}R$ {{ "%.2f"|format(produto.custo) }}{% else %}N/A{% endif %}</td>
+                        <td>{{ produto.data_inclusao | default('Data não disponível') }}</td>
+                        <td>{{ produto.data_validade | default('Data não disponível') }}</td>
+                        <td class="{{ 'highlight' if produto.dias_ate_vencimento is not none and produto.dias_ate_vencimento <= 7 else '' }}">
+                            {{ produto.dias_ate_vencimento | default('N/A') }}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+                <!-- Linha adicional para exibir o total de produtos com o mesmo código -->
+                <tfoot>
+                    <tr>
+                        <td colspan="3"><strong>Total de Produtos:</strong></td>
+                        <td colspan="2" id="totalQuantidade" class="total-align total-highlight"></td>
+                        <td colspan="5"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- Scripts do Bootstrap e jQuery para interatividade e componentes responsivos -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Função para calcular e exibir o total de produtos com o mesmo código
+        function calcularTotalQuantidade() {
+            var rows = document.querySelectorAll('#productTableBody tr');
+            var codeMap = new Map(); // Mapa para armazenar a quantidade total de cada código
+            rows.forEach(function(row) {
+                var codigo = row.cells[1].textContent; // Obtém o código da célula
+                var quantidade = parseInt(row.cells[4].textContent); // Obtém a quantidade da célula
+                var nome = row.cells[2].textContent; // Obtém o nome do produto
+                if (!codeMap.has(codigo)) {
+                    codeMap.set(codigo, { quantidade: quantidade, nome: nome }); // Se o código ainda não estiver no mapa, adiciona com a quantidade e o nome
+                } else {
+                    var current = codeMap.get(codigo);
+                    codeMap.set(codigo, { quantidade: current.quantidade + quantidade, nome: current.nome }); // Se o código já estiver no mapa, adiciona a quantidade atual
+                }
+            });
+
+            // Atualiza a célula do total de quantidade na tabela
+            var totalQuantidadeCell = document.getElementById('totalQuantidade');
+            totalQuantidadeCell.innerHTML = Array.from(codeMap.values()).map(item => `<div>${item.nome}: <span class="total-highlight">${item.quantidade}</span></div>`).join(''); // Cria uma lista de strings com o nome e a quantidade, depois junta-as sem separador
+        }
+
+        // Chama a função de cálculo quando a página é carregada
+        window.onload = calcularTotalQuantidade;
+    </script>
+</body>
+</html>

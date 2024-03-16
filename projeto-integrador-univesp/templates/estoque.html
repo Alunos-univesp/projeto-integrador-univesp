@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estoque - Controle de Estoque</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .table-container {
+            margin-top: 20px;
+        }
+        .table-responsive {
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .table {
+            margin-bottom: 0;
+        }
+        .highlight {
+            color: red;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .filtro-container {
+            margin-bottom: 10px;
+        }
+        /* Ajustando o espaçamento entre os botões */
+        .filtro-btns {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container table-container">
+        <h2>Estoque de Produtos</h2>
+        <div class="filtro-container">
+            <form action="/estoque" method="get">
+                <div class="form-row align-items-end">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="filtro_nome" placeholder="Filtrar por Nome">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="filtro_codigo" placeholder="Filtrar por Código">
+                    </div>
+                    <div class="col-md-4 filtro-btns">
+                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                        <a href="/estoque" class="btn btn-secondary">Limpar Filtros</a>
+                        <a href="{{ url_for('home') }}" class="btn btn-info">Home</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Código</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Marca</th> <!-- Adicionando a coluna "Marca" -->
+                        <th scope="col">Informações do Produto</th>
+                        <th scope="col">Quantidade</th>
+                        <th scope="col">Custo</th>
+                        <th scope="col">Data de Inclusão</th>
+                        <th scope="col">Data de Validade</th>
+                        <th scope="col">Dias até Vencimento</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto in produtos %}
+                    <tr>
+                        <td>{{ produto.id | default('N/A') }}</td>
+                        <td>{{ produto.codigo | default('Código não disponível') }}</td>
+                        <td>{{ produto.nome | default('Nome não disponível') }}</td>
+                        <td>{{ produto.marca | default('Marca não disponível') }}</td> <!-- Adicionando a coluna "Marca" -->
+                        <td>{{ produto.informacoes | default('N/A') }}</td>
+                        <td>{{ produto.quantidade | default('N/A') }}</td>
+                        <td>{% if produto.custo is not none %}R$ {{ "%.2f"|format(produto.custo) }}{% else %}N/A{% endif %}</td>
+                        <td>{{ produto.data_inclusao | default('Data não disponível') }}</td>
+                        <td>{{ produto.data_validade | default('Data não disponível') }}</td>
+                        <td class="{{ 'highlight' if produto.dias_ate_vencimento is not none and produto.dias_ate_vencimento <= 7 else '' }}">
+                            {{ produto.dias_ate_vencimento | default('N/A') }}
+                        </td>
+                        <td class="btn-container">
+                            <button class="btn btn-sm btn-danger" onclick="confirmarExclusao({{ produto.id }})">Excluir</button>
+                            <a href="/editar-produto/{{ produto.id }}" class="btn btn-sm btn-info">Editar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function confirmarExclusao(id) {
+            if (confirm("Tem certeza que deseja excluir este produto?")) {
+                window.location.href = "/excluir-produto/" + id;
+            }
+        }
+    </script>
+</body>
+</html>

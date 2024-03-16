@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Saída de Mercadorias</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .centered-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Espaço entre os botões */
+        }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="form-container">
+        <h2>Registrar Saída de Mercadorias</h2>
+        <form action="/registrar_saida" method="post" class="w-100 mb-3">
+            <!-- Campo para o ID do Produto -->
+            <div class="form-group">
+                <label for="produto_id">ID do Produto:</label>
+                <input type="number" class="form-control" id="produto_id" name="produto_id">
+            </div>
+            <!-- Campo para o Código do Produto -->
+            <div class="form-group">
+                <label for="codigo">Código do Produto:</label>
+                <input type="text" class="form-control" id="codigo" name="codigo">
+            </div>
+            <!-- Campo para a Quantidade -->
+            <div class="form-group">
+                <label for="quantidade">Quantidade:</label>
+                <input type="number" class="form-control" id="quantidade" name="quantidade" required>
+            </div>
+            <!-- Botão de Submissão -->
+            <button type="submit" class="btn btn-primary">Registrar Saída</button>
+        </form>
+        <!-- Botões de Navegação -->
+        <div class="centered-btns">
+            <a href="/" class="btn btn-secondary">Home</a>
+            <a href="/estoque" class="btn btn-info">Estoque</a>
+            <a href="/filtro-saida-produtos" class="btn btn-info">Filtrar Saídas</a> <!-- Botão para filtrar saídas -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Metadados da página, incluindo o conjunto de caracteres e a visibilidade responsiva -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título da página exibido na aba do navegador -->
+    <title>Editar Produto</title>
+    <!-- Link para a folha de estilos do Bootstrap para garantir estilização consistente e responsiva -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho da página para edição do produto -->
+        <h2>Editar Produto</h2>
+        <!-- Formulário para edição do produto, utilizando o método POST para envio dos dados -->
+        <form method="post">
+            <!-- Grupo de formulário para o nome do produto, com preenchimento automático do valor existente -->
+            <div class="form-group">
+                <label for="nomeProduto">Nome do Produto:</label>
+                <input type="text" class="form-control" id="nomeProduto" name="nomeProduto" value="{{ produto.nome }}">
+            </div>
+            <!-- Grupo de formulário para a marca do produto -->
+            <div class="form-group">
+                <label for="marcaProduto">Marca do Produto:</label>
+                <input type="text" class="form-control" id="marcaProduto" name="marcaProduto" value="{{ produto.marca }}">
+            </div>
+            <!-- Grupo de formulário para informações adicionais do produto -->
+            <div class="form-group">
+                <label for="informacoesProduto">Informações do Produto:</label>
+                <input type="text" class="form-control" id="informacoesProduto" name="informacoesProduto" value="{{ produto.informacoes }}">
+            </div>
+            <!-- Grupo de formulário para o código do produto -->
+            <div class="form-group">
+                <label for="codigo">Código:</label>
+                <input type="text" class="form-control" id="codigo" name="codigo" value="{{ produto.codigo }}">
+            </div>
+            <!-- Grupo de formulário para o custo do produto -->
+            <div class="form-group">
+                <label for="custo">Custo:</label>
+                <input type="text" class="form-control" id="custo" name="custo" value="{{ produto.custo }}">
+            </div>
+            <!-- Grupo de formulário para a quantidade do produto -->
+            <div class="form-group">
+                <label for="quantidadeProduto">Quantidade:</label>
+                <input type="text" class="form-control" id="quantidadeProduto" name="quantidadeProduto" value="{{ produto.quantidade }}">
+            </div>
+            <!-- Grupo de formulário para a data de cadastro do produto -->
+            <div class="form-group">
+                <label for="dataCadastro">Data de Cadastro:</label>
+                <input type="text" class="form-control" id="dataCadastro" name="dataCadastro" value="{{ produto.data_inclusao }}">
+            </div>
+            <!-- Grupo de formulário para a data de validade do produto -->
+            <div class="form-group">
+                <label for="dataValidade">Data de Validade:</label>
+                <input type="text" class="form-control" id="dataValidade" name="dataValidade" value="{{ produto.data_validade }}">
+            </div>
+            <!-- Botão para submissão do formulário -->
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <!-- Botão para voltar à página anterior, melhorando a navegabilidade -->
+            <button type="button" class="btn btn-secondary" onclick="history.back()">Voltar</button>
+        </form>
+    </div>
+</body>
+</html>
