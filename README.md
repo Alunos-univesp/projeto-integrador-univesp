@@ -6,14 +6,15 @@ Este projeto é um sistema de controle de mercadorias destinado a pequenas e mé
 
 Para instalar este projeto, siga os passos abaixo:
 
-1. Clone o repositório para a sua máquina local usando `git clone https://github.com/douglasrasse/projeto-integrador.git`.
+1. Clone o repositório para a sua máquina local usando `git clone https://github.com/Alunos-univesp/projeto-integrador-univesp.git
+`.
 2. Navegue até a pasta do projeto clonado.
 3. Instale todas as dependências necessárias executando `npm install` ou `yarn install` no terminal.
 4. Inicie o servidor local com `npm start` ou `yarn start`.
 
 ## Uso
 
-Após a instalação, você pode acessar o sistema de controle de mercadorias no seu navegador web em `http://localhost:3000`.
+Após a instalação, você pode acessar o sistema de controle de mercadorias no seu navegador web em `http://localhost:5000 ou http://localhost:5000/login ou http://localhost:5000/home`.
 
 Para adicionar um novo produto ao inventário, navegue até a seção "Adicionar Produto" e preencha o formulário. Todos os produtos adicionados podem ser visualizados na página principal.
 
