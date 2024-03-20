@@ -7,40 +7,97 @@
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Estilos adicionais para centralização vertical e ajustes nos botões */
-        .vertical-center {
-            min-height: 100vh; /* altura da tela completa */
+        /* Estilizando o título */
+        .navbar-brand {
             display: flex;
-            align-items: center; /* alinhamento vertical */
-            justify-content: center; /* alinhamento horizontal */
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            text-align: center; /* Alinhar texto ao centro */
+        }
+        /* Estilizando o botão "Sair" */
+        .navbar-nav .dropdown-item {
+            cursor: pointer;
+            color: #dc3545; /* Cor do texto */
+        }
+        .navbar-nav .dropdown-item:hover {
+            background-color: transparent; /* Remover fundo ao passar o mouse */
+        }
+        /* Alinhar o botão "Sair" à direita */
+        .ml-auto {
+            margin-left: auto !important;
+        }
+        /* Estilizando a área de botões */
+        .vertical-center {
+            min-height: 100vh; 
+            display: flex;
+            align-items: center; 
+            justify-content: center; 
         }
         .btn-group-vertical > a {
-            margin-bottom: 10px; /* espaço entre os botões */
+            margin-bottom: 10px; 
         }
     </style>
 </head>
 <body>
-    <!-- Navbar simples para navegação -->
+    <!-- Navbar com usuário logado e botão de logout -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Controle de Estoque</a>
-        </div>
+        <a class="navbar-brand" href="#">Controle de Estoque</a>
+        <ul class="navbar-nav ml-auto"> <!-- A classe ml-auto alinha o elemento à direita -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Usuário: <span id="user-name">Carregando...</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#" onclick="logout()">Sair</a> <!-- Botão Sair -->
+                </div>
+            </li>
+        </ul>
     </nav>
 
-    <!-- Container centralizado -->
     <div class="vertical-center">
-        <div> <!-- Envoltório dos botões -->
-            <h3 class="text-center mb-4">Sistema de Controle de Estoque</h2>
-            <!-- Grupo de botões vertical -->
+        <div>
+            <h3 class="text-center mb-4">Sistema de Controle de Estoque</h3>
             <div class="btn-group-vertical">
                 <a href="/cadastro-mercadoria" class="btn btn-primary btn-lg">Cadastro de Mercadoria</a>
                 <a href="/lista-produtos-proximo-vencimento" class="btn btn-warning btn-lg">Lista de Produtos Próximo ao Vencimento</a>
                 <a href="/estoque" class="btn btn-success btn-lg">Estoque</a>
-                <a href="{{ url_for('saida_mercadorias') }}">Registrar Saída de Mercadorias</a>
-
+                <a href="/saida-mercadorias" class="btn btn-info btn-lg">Registrar Saída de Mercadorias</a>
             </div>
         </div>
     </div>
+
+    <!-- Firebase SDK e configuração -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+    <script>
+        // Sua configuração do Firebase
+        var firebaseConfig = {
+            apiKey: "AIzaSyCCTTKM8tFMwxcYULKZwrBNO8W8hkbW_PM",
+            authDomain: "controle-de-mercadoria.firebaseapp.com",
+            projectId: "controle-de-mercadoria",
+            storageBucket: "controle-de-mercadoria.appspot.com",
+            messagingSenderId: "582797948259",
+            appId: "1:582797948259:web:controle-de-mercadoria"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                document.getElementById('user-name').textContent = user.displayName || user.email;
+            } else {
+                window.location.href = '/login';
+            }
+        });
+
+        function logout() {
+            firebase.auth().signOut().then(function() {
+                window.location.href = '/login';
+            }).catch(function(error) {
+                console.error('Erro ao fazer logout', error);
+            });
+        }
+    </script>
 
     <!-- Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

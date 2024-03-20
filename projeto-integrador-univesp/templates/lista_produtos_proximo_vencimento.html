@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Configurações básicas da página, incluindo caracteres e responsividade -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produtos Próximos ao Vencimento</title>
-    <!-- Link para o CSS do Bootstrap para estilização rápida e responsiva -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Estilos personalizados para melhorar a aparência da tabela e da página */
         .table-container {
             margin-top: 20px;
         }
@@ -20,26 +17,37 @@
             margin-bottom: 0;
         }
         .highlight {
-            color: red; /* Destaque para produtos próximos do vencimento */
+            color: red;
         }
-        /* Estilos para destacar e alinhar nome e quantidade */
         .total-highlight {
-            font-weight: bold; /* Deixa o texto em negrito */
-            color: #007bff; /* Cor azul para destacar */
+            font-weight: bold;
+            color: #007bff;
         }
         .total-align {
-            text-align: center; /* Alinha o texto ao centro */
+            text-align: center;
         }
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Produtos Próximos ao Vencimento</a>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <span class="navbar-text" id="user-name">Carregando...</span>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-info ml-2" href="/home">Home</a> <!-- Botão Home -->
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-danger ml-2" onclick="logout()">Sair</button>
+            </li>
+        </ul>
+    </nav>
+
     <div class="container table-container">
         <h2>Produtos Próximos ao Vencimento</h2>
-        <!-- Botão Voltar adicionado para melhor navegação -->
-        <button type="button" class="btn btn-info mb-3" onclick="history.back()">Voltar</button>
         <div class="table-responsive">
             <table class="table table-hover table-striped">
-                <!-- Cabeçalho da tabela, definindo as colunas -->
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">ID</th>
@@ -90,6 +98,42 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+   
+   <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyCCTTKM8tFMwxcYULKZwrBNO8W8hkbW_PM",
+            authDomain: "controle-de-mercadoria.firebaseapp.com",
+            projectId: "controle-de-mercadoria",
+            storageBucket: "controle-de-mercadoria.appspot.com",
+            messagingSenderId: "582797948259",
+            appId: "1:582797948259:web:controle-de-mercadoria"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                document.getElementById('user-name').textContent = user.displayName || user.email;
+            } else {
+                window.location.href = '/login';
+            }
+        });
+
+        function logout() {
+            firebase.auth().signOut().then(function() {
+                window.location.href = '/login';
+            }).catch(function(error) {
+                console.error('Erro ao fazer logout', error);
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+
+
     <script>
         // Função para calcular e exibir o total de produtos com o mesmo código
         function calcularTotalQuantidade() {

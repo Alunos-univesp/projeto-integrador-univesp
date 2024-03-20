@@ -13,9 +13,6 @@
             border-radius: 5px;
             overflow: hidden;
         }
-        .table {
-            margin-bottom: 0;
-        }
         .highlight {
             color: red;
         }
@@ -27,7 +24,6 @@
         .filtro-container {
             margin-bottom: 10px;
         }
-        /* Ajustando o espaçamento entre os botões */
         .filtro-btns {
             display: flex;
             gap: 10px;
@@ -35,6 +31,20 @@
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Estoque de Produtos</a>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <span class="navbar-text" id="user-name">Carregando...</span>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('home') }}" class="btn btn-info mr-2">Home</a> <!-- Movendo o botão "Home" para antes do botão "Sair" -->
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-danger" onclick="logout()">Sair</button>
+            </li>
+        </ul>
+    </nav>
     <div class="container table-container">
         <h2>Estoque de Produtos</h2>
         <div class="filtro-container">
@@ -49,7 +59,6 @@
                     <div class="col-md-4 filtro-btns">
                         <button type="submit" class="btn btn-primary">Filtrar</button>
                         <a href="/estoque" class="btn btn-secondary">Limpar Filtros</a>
-                        <a href="{{ url_for('home') }}" class="btn btn-info">Home</a>
                     </div>
                 </div>
             </form>
@@ -98,9 +107,43 @@
         </div>
     </div>
 
+    <!-- Scripts para Bootstrap, jQuery e Firebase -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+
+    <script>
+var firebaseConfig = {
+            apiKey: "AIzaSyCCTTKM8tFMwxcYULKZwrBNO8W8hkbW_PM",
+            authDomain: "controle-de-mercadoria.firebaseapp.com",
+            projectId: "controle-de-mercadoria",
+            storageBucket: "controle-de-mercadoria.appspot.com",
+            messagingSenderId: "582797948259",
+            appId: "1:582797948259:web:controle-de-mercadoria"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                document.getElementById('user-name').textContent = user.displayName || user.email;
+            } else {
+                window.location.href = '/login';
+            }
+        });
+
+        function logout() {
+            firebase.auth().signOut().then(function() {
+                window.location.href = '/login';
+            }).catch(function(error) {
+                console.error('Erro ao fazer logout', error);
+            });
+        }
+    </script>
+</body>
+</html>
+
     <script>
         function confirmarExclusao(id) {
             if (confirm("Tem certeza que deseja excluir este produto?")) {

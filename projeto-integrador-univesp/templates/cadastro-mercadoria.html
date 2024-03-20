@@ -1,49 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Definições básicas do cabeçalho da página -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Mercadorias</title>
-    <!-- Inclusão do CSS do Bootstrap para estilização -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand, .navbar-nav .nav-link {
+            display: flex;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
+   <!-- Navbar para navegação -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Cadastro de Mercadorias</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <span class="navbar-text mr-3">Usuário: <span id="user-name">Carregando...</span></span>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-secondary mr-2" href="/home">Home</a> <!-- Botão Home -->
+                <button class="btn btn-danger" onclick="logout()">Sair</button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
     <!-- Container principal do Bootstrap para alinhamento e responsividade -->
     <div class="container mt-4">
-        <h2>Cadastro de Produto</h2>
-        <!-- Botão "Home" -->
-        <a href="{{ url_for('home') }}" class="btn btn-primary mb-2">Home</a>
-        <!-- Formulário de Cadastro de Produto, enviando os dados via POST para o endpoint 'cadastro_mercadoria' -->
-        <form id="cadastro-produto-form" method="POST" onsubmit="return validateForm()" action="{{ url_for('cadastro_mercadoria') }}">
-            <!-- Campo de Código do Produto -->
+        <h2>Cadastro de Produto</h2>      
+        <form id="cadastro-produto-form" method="POST" onsubmit="return validateForm()" action="/cadastro-mercadoria">
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="codigo">Código *</label>
                     <input type="text" class="form-control" id="codigo" name="codigo" required>
                 </div>
-                <!-- Campo de Nome do Produto -->
                 <div class="form-group col-md-4">
                     <label for="nomeProduto">Nome do Produto *</label>
                     <input type="text" class="form-control" id="nomeProduto" name="nomeProduto" required>
                 </div>
-                <!-- Campo de Marca do Produto -->
                 <div class="form-group col-md-4">
                     <label for="marcaProduto">Marca do Produto</label>
                     <input type="text" class="form-control" id="marcaProduto" name="marcaProduto">
                 </div>
             </div>
-            <!-- Campo de Informações Adicionais do Produto -->
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <label for="informacoesProduto">Informações do Produto</label>
+                    <label for="informacoesProduto">Descrição</label>
                     <textarea class="form-control" id="informacoesProduto" name="informacoesProduto"></textarea>
                 </div>
             </div>
-            <!-- Campos de Custo, Quantidade e Datas do Produto -->
             <div class="form-row">
                 <div class="form-group col-md-3">
-                    <label for="custo">Custo *</label>
+                    <label for="custo">Preço *</label>
                     <input type="number" class="form-control" id="custo" name="custo" step="0.01" required>
                 </div>
                 <div class="form-group col-md-3">
@@ -59,50 +74,72 @@
                     <input type="date" class="form-control" id="dataValidade" name="dataValidade">
                 </div>
             </div>
-            <!-- Botão de Ação do Formulário -->
             <button type="submit" class="btn btn-primary">Salvar</button>
         </form>
         <div id="feedback" class="mt-3"></div>
     </div>
 
-    <!-- Scripts do Bootstrap e jQuery para funcionalidades interativas -->
+    <!-- Scripts para Bootstrap, jQuery e Firebase -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+    
     <script>
-        // Função de validação do formulário para garantir a integridade dos dados inseridos
+        var firebaseConfig = {
+            apiKey: "AIzaSyCCTTKM8tFMwxcYULKZwrBNO8W8hkbW_PM",
+            authDomain: "controle-de-mercadoria.firebaseapp.com",
+            projectId: "controle-de-mercadoria",
+            storageBucket: "controle-de-mercadoria.appspot.com",
+            messagingSenderId: "582797948259",
+            appId: "1:582797948259:web:controle-de-mercadoria"
+        };
+        firebase.initializeApp(firebaseConfig);
+    
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                document.getElementById('user-name').textContent = user.displayName || user.email;
+            } else {
+                window.location.href = '/login';
+            }
+        });
+    
+        function logout() {
+            firebase.auth().signOut().then(function() {
+                window.location.href = '/login';
+            }).catch(function(error) {
+                console.error('Erro ao fazer logout', error);
+            });
+        }
+    
         function validateForm() {
             var codigo = document.getElementById('codigo').value;
-            // Valida se o código é um número inteiro
+            var custo = parseFloat(document.getElementById('custo').value);
+            var quantidade = parseInt(document.getElementById('quantidadeProduto').value);
+            
             if (!/^[\d]+$/.test(codigo)) {
                 displayError('O código deve ser um número inteiro.');
                 return false;
             }
-
-            var custo = parseFloat(document.getElementById('custo').value);
-            // Valida se o custo é um número positivo
+    
             if (custo <= 0 || isNaN(custo)) {
                 displayError('O custo deve ser maior que zero.');
                 return false;
             }
-
-            var quantidade = parseInt(document.getElementById('quantidadeProduto').value);
-            // Valida se a quantidade é um número inteiro positivo
+    
             if (quantidade <= 0 || isNaN(quantidade)) {
                 displayError('A quantidade deve ser um número inteiro maior que zero.');
                 return false;
             }
-
-            // Adiciona mais validações conforme necessário
-            return true; // Retorna verdadeiro se todas as validações passarem
+    
+            return true;
         }
-
-        // Função para exibir mensagens de erro
+    
         function displayError(message) {
             var feedbackDiv = document.getElementById('feedback');
             feedbackDiv.innerHTML = '<div class="alert alert-danger" role="alert">' + message + '</div>';
         }
     </script>
-</body>
+    </body>
 </html>

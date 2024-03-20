@@ -19,6 +19,26 @@
     </style>
 </head>
 <body>
+
+<!-- Navbar para navegação -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Registrar Saída de Mercadorias</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContents">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <span class="navbar-text" id="user-name">Carregando...</span>
+            </li>
+            <li class="nav-item">
+                <a href="home" class="btn btn-secondary">Home</a> <!-- Botão Home -->
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-danger" onclick="logout()">Sair</button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
 <div class="container mt-4">
     <div class="form-container">
         <h2>Registrar Saída de Mercadorias</h2>
@@ -43,11 +63,45 @@
         </form>
         <!-- Botões de Navegação -->
         <div class="centered-btns">
-            <a href="/" class="btn btn-secondary">Home</a>
             <a href="/estoque" class="btn btn-info">Estoque</a>
             <a href="/filtro-saida-produtos" class="btn btn-info">Filtrar Saídas</a> <!-- Botão para filtrar saídas -->
         </div>
     </div>
 </div>
+
+<!-- Scripts necessários para Bootstrap, Firebase e funcionalidades da página -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+
+<script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyCCTTKM8tFMwxcYULKZwrBNO8W8hkbW_PM",
+        authDomain: "controle-de-mercadoria.firebaseapp.com",
+        projectId: "controle-de-mercadoria",
+        storageBucket: "controle-de-mercadoria.appspot.com",
+        messagingSenderId: "582797948259",
+        appId: "1:582797948259:web:controle-de-mercadoria"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            document.getElementById('user-name').textContent = user.displayName || user.email;
+        } else {
+            window.location.href = '/login';
+        }
+    });
+
+    function logout() {
+        firebase.auth().signOut().then(function() {
+            window.location.href = '/login';
+        }).catch(function(error) {
+            console.error('Erro ao fazer logout', error);
+        });
+    }
+</script>
 </body>
 </html>
