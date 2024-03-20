@@ -38,7 +38,7 @@
                 <span class="navbar-text" id="user-name">Carregando...</span>
             </li>
             <li class="nav-item">
-                <a href="{{ url_for('home') }}" class="btn btn-info mr-2">Home</a> <!-- Movendo o botão "Home" para antes do botão "Sair" -->
+                <a href="{{ url_for('home') }}" class="btn btn-info mr-2">Home</a>
             </li>
             <li class="nav-item">
                 <button class="btn btn-danger" onclick="logout()">Sair</button>
@@ -50,13 +50,16 @@
         <div class="filtro-container">
             <form action="/estoque" method="get">
                 <div class="form-row align-items-end">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <input type="text" class="form-control" name="filtro_nome" placeholder="Filtrar por Nome">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <input type="text" class="form-control" name="filtro_codigo" placeholder="Filtrar por Código">
                     </div>
-                    <div class="col-md-4 filtro-btns">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" name="filtro_marca" placeholder="Filtrar por Marca"> <!-- Adicionando filtro para Marca -->
+                    </div>
+                    <div class="col-md-3 filtro-btns">
                         <button type="submit" class="btn btn-primary">Filtrar</button>
                         <a href="/estoque" class="btn btn-secondary">Limpar Filtros</a>
                     </div>
@@ -142,14 +145,5 @@ var firebaseConfig = {
         }
     </script>
 </body>
-</html>
-
-    <script>
-        function confirmarExclusao(id) {
-            if (confirm("Tem certeza que deseja excluir este produto?")) {
-                window.location.href = "/excluir-produto/" + id;
-            }
-        }
-    </script>
-</body>
-</html>
+</
+html>
