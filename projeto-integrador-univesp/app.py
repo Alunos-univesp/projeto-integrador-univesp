@@ -4,7 +4,7 @@ import os
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
-
+app.secret_key = 'UNIVESP'
 # Define o caminho para o banco de dados SQLite principal
 DATABASE = os.path.join(os.getcwd(), 'meu_banco_de_dados.db')
 
@@ -149,13 +149,15 @@ def estoque():
     # Renderiza o template do estoque com os produtos filtrados
     return render_template('estoque.html', produtos=[dict(produto) for produto in produtos])
 
-# Rota para excluir um produto específico
-@app.route('/excluir-produto/<int:id>', methods=['GET', 'POST'])
+@app.route('/excluir-produto/<int:id>', methods=['POST'])
 def excluir_produto(id):
-    db = get_db()
-    db.execute('DELETE FROM produtos WHERE id = ?', (id,))  # Executa a exclusão
-    db.commit()
-    return redirect(url_for('estoque'))  # Redireciona de volta para a página de estoque
+    if request.method == 'POST':
+        db = get_db()
+        db.execute('DELETE FROM produtos WHERE id = ?', (id,))
+        db.commit()
+        return redirect(url_for('estoque'))
+    else:
+        return "Method Not Allowed", 405  # Retorna um erro 405 se o método não for permitido
 
 # Rota para editar as informações de um produto específico
 @app.route('/editar-produto/<int:produto_id>', methods=['GET', 'POST'])
@@ -227,38 +229,39 @@ def saida_mercadorias():
     # Renderiza o template da página de saída de mercadorias
     return render_template('saida_mercadorias.html')
 
-# Rota para registrar a saída de um produto
+from flask import flash
+
 @app.route('/registrar_saida', methods=['POST'])
 def registrar_saida():
-    # Obtém os dados do formulário
     produto_id = request.form.get('produto_id')
     codigo = request.form.get('codigo')
     quantidade = int(request.form.get('quantidade'))
 
-    db = get_db()  # Obtém a conexão com o banco de dados
-    # Encontra o produto correspondente baseado no ID ou código
+    db = get_db()
+    produto = None
     if produto_id and codigo:
         produto = db.execute('SELECT * FROM produtos WHERE id = ? AND codigo = ?', (produto_id, codigo)).fetchone()
     elif produto_id:
         produto = db.execute('SELECT * FROM produtos WHERE id = ?', (produto_id,)).fetchone()
     elif codigo:
         produto = db.execute('SELECT * FROM produtos WHERE codigo = ?', (codigo,)).fetchone()
-    else:
-        return "Produto não especificado corretamente."
 
-    # Verifica se a quantidade solicitada está disponível e registra a saída
     if produto and quantidade <= produto['quantidade']:
         nova_quantidade = produto['quantidade'] - quantidade
         db.execute('UPDATE produtos SET quantidade = ? WHERE id = ?', (nova_quantidade, produto['id']))
         db.commit()
-        # Adiciona o registro de saída no banco de dados
         add_produto_saida(produto['id'], produto['nome'], produto['marca'], produto['custo'], quantidade)
         mensagem = 'Saída de mercadoria registrada com sucesso.'
+        # Use flash() para enviar a mensagem de sucesso
+        flash(mensagem, 'success')
     else:
         mensagem = 'Erro: Quantidade solicitada maior do que a disponível ou produto não encontrado.'
+        # Use flash() para enviar a mensagem de erro
+        flash(mensagem, 'error')
 
-    # Renderiza o template de saída de mercadorias com a mensagem de resultado
-    return render_template('saida_mercadorias.html', mensagem=mensagem)
+    # Redireciona de volta para a página de saída de mercadorias ou passa a mensagem diretamente
+    return redirect(url_for('saida_mercadorias'))
+
 
 # Rota para selecionar o intervalo de datas para o relatório de saídas de produtos
 @app.route('/selecionar-intervalo-datas')
