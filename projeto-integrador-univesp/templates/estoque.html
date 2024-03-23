@@ -94,6 +94,7 @@
                         <td>{{ produto.quantidade | default('N/A') }}</td>
                         <td>{% if produto.custo is not none %}R$ {{ "%.2f"|format(produto.custo) }}{% else %}N/A{% endif %}</td>
                         <td>{{ produto.data_inclusao | default('Data não disponível') }}</td>
+                        <form action="/excluir-produto/{{ produto.id }}" method="POST">
                         <td>{{ produto.data_validade | default('Data não disponível') }}</td>
                         <td class="{{ 'highlight' if produto.dias_ate_vencimento is not none and produto.dias_ate_vencimento <= 7 else '' }}">
                             {{ produto.dias_ate_vencimento | default('N/A') }}
@@ -110,6 +111,7 @@
         </div>
     </div>
 
+    
     <!-- Scripts para Bootstrap, jQuery e Firebase -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -144,6 +146,15 @@ var firebaseConfig = {
             });
         }
     </script>
+    <script>
+        function confirmarExclusao(id) {
+            if (confirm('Tem certeza que deseja excluir este produto?')) {
+                // Se o usuário confirmar a exclusão, redirecione para a rota que executa a exclusão
+                window.location.href = '/excluir-produto/' + id;
+            }
+        }
+    </script>
+    
 </body>
 </
 html>
