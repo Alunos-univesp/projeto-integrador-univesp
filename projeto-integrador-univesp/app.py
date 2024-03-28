@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, g
 import sqlite3
 import os
 from datetime import datetime, timedelta
+from markupsafe import escape
 
 app = Flask(__name__)
 app.secret_key = 'UNIVESP'
