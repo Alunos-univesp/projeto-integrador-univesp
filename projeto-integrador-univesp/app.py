@@ -4,6 +4,8 @@ import os
 from datetime import datetime, timedelta
 from markupsafe import escape
 
+
+
 app = Flask(__name__)
 app.secret_key = 'UNIVESP'
 # Define o caminho para o banco de dados SQLite principal
