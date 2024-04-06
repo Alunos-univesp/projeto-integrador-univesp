@@ -1,0 +1,101 @@
+Programas/
+Configurações Locais/
+Cookies/
+Dados de Aplicativos/
+Documents/Meus Vídeos/
+Documents/Minhas Imagens/
+Documents/Minhas Músicas/
+Menu Iniciar/
+Meus Documentos/
+Modelos/
+Recent/
+SendTo/
+.Ld9VirtualBox/
+.android/
+.bash_history
+.cache/
+.emulator_console_auth_token
+.fontconfig/
+.git-credentials
+.gitconfig
+.lesshst
+.minttyrc
+.ssh/
+.vscode/
+3D Objects/
+AppData/
+Contacts/
+Desktop/
+Documents/
+Downloads/
+Favorites/
+IntelGraphicsProfiles/
+Links/
+Music/
+OneDrive/
+Pictures/
+PycharmProjects/
+Saved Games/
+Searches/
+Videos/
+estoque.db
+inittk.ini
+inst.ini
+mumu_boot.txt
+ntuser.dat*
+nuuid.ini
+useruid.ini
+vmlogs/
+# Arquivos e diretórios que devem ser ignorados pelo Git
+
+# Diretórios
+.Ld9VirtualBox/
+.android/
+.cache/
+.ssh/
+.vscode/
+Documents/
+Downloads/
+OneDrive/
+Pictures/
+PycharmProjects/
+Saved Games/
+Searches/
+Videos/
+
+# Arquivos
+.bash_history
+.emulator_console_auth_token
+.git-credentials
+.gitconfig
+.lesshst
+.minttyrc
+3D Objects/
+AppData/
+Contacts/
+Desktop/
+Favorites/
+IntelGraphicsProfiles/
+Links/
+Music/
+NTUSER.DAT*
+OneDrive/
+d4ac4633ebd6440fa397b84f1bc94a3c.7z
+estoque.db
+inittk.ini
+inst.ini
+mumu_boot.txt
+ntuser.dat.LOG*
+ntuser.ini
+nuuid.ini
+useruid.ini
+vmlogs/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Pastas do sistema
+AppData/
+Desktop/
+Downloads/
